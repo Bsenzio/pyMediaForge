@@ -1,0 +1,25 @@
+name: Windows executable
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Build and test
+        shell: pwsh
+        run: ./Build_Executable.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MediaForge-Windows-x64
+          path: dist/MediaForge.exe
+          if-no-files-found: error
